@@ -1492,20 +1492,30 @@
          */
         
         katexRender : function() {
-            
-            if (timer === null)
-            {
+            try{
+                if (timer === null)
+                {
+                    return this;
+                }
+                
+                this.previewContainer.find("." + editormd.classNames.tex).each(function(){
+                    try{
+                        var tex  = $(this);
+                        editormd.$katex.render(tex.text(), tex[0]);
+                        
+                        tex.find(".katex").css("font-size", "1.6em");
+                    }catch(err){
+                        console.log(err);
+                    }
+                });   
+                return this;
+            }catch(err){
+                console.log(err);
                 return this;
             }
             
-            this.previewContainer.find("." + editormd.classNames.tex).each(function(){
-                var tex  = $(this);
-                editormd.$katex.render(tex.text(), tex[0]);
-                
-                tex.find(".katex").css("font-size", "1.6em");
-            });   
 
-            return this;
+            
         },
         
         /**
@@ -4012,26 +4022,37 @@
 
         if (settings.tex)
         {
-            var katexHandle = function() {
-                div.find("." + editormd.classNames.tex).each(function(){
-                    var tex  = $(this);                    
-                    katex.render(tex.html().replace(/&lt;/g, "<").replace(/&gt;/g, ">"), tex[0]);                    
-                    tex.find(".katex").css("font-size", "1.6em");
-                });
-            };
-            
-            if (settings.autoLoadKaTeX && !editormd.$katex && !editormd.kaTeXLoaded)
-            {
-                this.loadKaTeX(function() {
-                    editormd.$katex      = katex;
-                    editormd.kaTeXLoaded = true;
+            try{
+                var katexHandle = function() {
+                    div.find("." + editormd.classNames.tex).each(function(){
+                        try{                            
+                            var tex  = $(this);   
+                            console.log(tex.html().replace(/&lt;/g, "<").replace(/&gt;/g, ">"));                 
+                            katex.render(tex.html().replace(/&lt;/g, "<").replace(/&gt;/g, ">"), tex[0]);                    
+                            tex.find(".katex").css("font-size", "1.6em");
+                        }catch(err){
+                            console.log(err);
+                        }
+                        
+                    });
+                };
+                
+                if (settings.autoLoadKaTeX && !editormd.$katex && !editormd.kaTeXLoaded)
+                {
+                    this.loadKaTeX(function() {
+                        editormd.$katex      = katex;
+                        editormd.kaTeXLoaded = true;
+                        katexHandle();
+                    });
+                }
+                else
+                {
                     katexHandle();
-                });
+                }
+            }catch(err){
+                console.log(err);
             }
-            else
-            {
-                katexHandle();
-            }
+            
         }
         
         div.getMarkdown = function() {            

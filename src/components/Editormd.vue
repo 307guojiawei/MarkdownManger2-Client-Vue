@@ -1,6 +1,6 @@
 <template>
   <div id="editor-md" class="main-editor">
-    <textarea></textarea>
+    <textarea v-model="content"></textarea>
   </div>
 </template>
 
@@ -40,6 +40,10 @@
           };
         },
       },
+      content:{
+        type: String,
+        default: '# Helloworld1',
+      },
     },
     data() {
       return {
@@ -52,8 +56,8 @@
       // async loading js dependencies
       // editormd depdend on jquery and zepto
       $script([
-        `${this.editorPath}js/jquery.min.js`,
-        `${this.editorPath}js/zepto.min.js`,
+        `https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js`,
+        `https://cdn.bootcss.com/zepto/1.0rc1/zepto.min.js`,
       ], () => {
         $script(`${this.editorPath}js/editormd.min.js`, () => {
           this.initEditor();
@@ -77,9 +81,11 @@
   };
 </script>
 
-<style lang="stylus" scoped>
-  .main-editor
-    width 100%
-    height 100%
-    margin-top 100px;
+<style scoped>
+  .main-editor{
+    width: 100%;
+    height: 100%;
+    margin-top: 100px;
+  }
+    
 </style>

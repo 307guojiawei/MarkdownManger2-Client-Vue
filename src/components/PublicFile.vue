@@ -35,7 +35,7 @@ export default {
   },
   methods:{
       viewFile: function(id){
-          this.$router.push({name:'MarkdownViewer',query:{fid:id}});
+          this.$router.push({name:'markdownViewer',query:{fid:id,isPublic:true}});
       }
   }
 };
