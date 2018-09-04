@@ -90,6 +90,10 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  beforeCreate: function () {
+    this.$toast("HelloWorld")
+
   }
 }
 </script>
