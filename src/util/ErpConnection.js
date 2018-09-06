@@ -17,6 +17,9 @@ Connector.install = function (Vue){
                 //全局错误处理策略
                 switch(response.data.code){
                     case 4002://用户未登录
+                        if(response.data.msg === "login first"){
+                            sessionStorage.removeItem('token');
+                        }
                         break;
                     case 4003://session变化
                         if(response.data.payload.token === "None"){

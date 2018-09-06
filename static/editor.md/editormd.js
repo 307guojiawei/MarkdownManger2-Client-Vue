@@ -1492,20 +1492,32 @@
          */
         
         katexRender : function() {
-            
-            if (timer === null)
-            {
+            try{
+                if (timer === null)
+                {
+                    return this;
+                }
+                
+                this.previewContainer.find("." + editormd.classNames.tex).each(function(){
+
+                    try{
+                        var tex  = $(this);
+                        //console.log(tex.text());
+                        editormd.$katex.render(tex.text(), tex[0]);
+                        
+                        tex.find(".katex").css("font-size", "1.6em");
+                    }catch(err){
+                        //console.log(err);
+                    }
+                });   
+                return this;
+            }catch(err){
+                //console.log(err);
                 return this;
             }
             
-            this.previewContainer.find("." + editormd.classNames.tex).each(function(){
-                var tex  = $(this);
-                editormd.$katex.render(tex.text(), tex[0]);
-                
-                tex.find(".katex").css("font-size", "1.6em");
-            });   
 
-            return this;
+            
         },
         
         /**
@@ -3614,7 +3626,7 @@
             }
             
             var tocHTML = "<div class=\"markdown-toc editormd-markdown-toc\">" + text + "</div>";
-            
+            //console.log((isToC) ? ( (isToCMenu) ? "<div class=\"editormd-toc-menu\">" + tocHTML + "</div><br/>" : tocHTML ) : ( (pageBreakReg.test(text)) ? this.pageBreak(text) : "<p" + isTeXAddClass + ">" + this.atLink(this.emoji(text)) + "</p>\n" ))
             return (isToC) ? ( (isToCMenu) ? "<div class=\"editormd-toc-menu\">" + tocHTML + "</div><br/>" : tocHTML )
                            : ( (pageBreakReg.test(text)) ? this.pageBreak(text) : "<p" + isTeXAddClass + ">" + this.atLink(this.emoji(text)) + "</p>\n" );
         };
@@ -4012,26 +4024,37 @@
 
         if (settings.tex)
         {
-            var katexHandle = function() {
-                div.find("." + editormd.classNames.tex).each(function(){
-                    var tex  = $(this);                    
-                    katex.render(tex.html().replace(/&lt;/g, "<").replace(/&gt;/g, ">"), tex[0]);                    
-                    tex.find(".katex").css("font-size", "1.6em");
-                });
-            };
-            
-            if (settings.autoLoadKaTeX && !editormd.$katex && !editormd.kaTeXLoaded)
-            {
-                this.loadKaTeX(function() {
-                    editormd.$katex      = katex;
-                    editormd.kaTeXLoaded = true;
+            try{
+                var katexHandle = function() {
+                    div.find("." + editormd.classNames.tex).each(function(){
+                        try{                            
+                            var tex  = $(this);   
+                            //console.log(tex.html().replace(/&lt;/g, "<").replace(/&gt;/g, ">"));                 
+                            katex.render(tex.html().replace(/&lt;/g, "<").replace(/&gt;/g, ">"), tex[0]);                    
+                            tex.find(".katex").css("font-size", "1.6em");
+                        }catch(err){
+                            //console.log(err);
+                        }
+                        
+                    });
+                };
+                
+                if (settings.autoLoadKaTeX && !editormd.$katex && !editormd.kaTeXLoaded)
+                {
+                    this.loadKaTeX(function() {
+                        editormd.$katex      = katex;
+                        editormd.kaTeXLoaded = true;
+                        katexHandle();
+                    });
+                }
+                else
+                {
                     katexHandle();
-                });
+                }
+            }catch(err){
+                //console.log(err);
             }
-            else
-            {
-                katexHandle();
-            }
+            
         }
         
         div.getMarkdown = function() {            
@@ -4179,8 +4202,10 @@
     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL
     // You can custom KaTeX load url.
     editormd.katexURL  = {
-        css : "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min",
-        js  : "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min"
+        //css : "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min",
+        //js  : "//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.3.0/katex.min"
+        css: "https://cdn.bootcss.com/KaTeX/0.9.0/katex.min",
+        js: "https://cdn.bootcss.com/KaTeX/0.9.0/katex.min",
     };
     
     editormd.kaTeXLoaded = false;

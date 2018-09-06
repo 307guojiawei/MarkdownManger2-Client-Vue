@@ -14,12 +14,16 @@
         type: String,
         default: '/static/editor.md/',
       },
+      height:{
+          type: String,
+          default:"100%"
+      },
       editorConfig: {
         type: Object,
         default() {
           return {
-            width: '88%',
-            height: 530,
+            width: '100%',
+            height: this.height,
             path: '/static/editor.md/lib/', // Autoload modules mode, codemirror, marked... dependents libs path
             codeFold: true,
             saveHTMLToTextarea: true,
@@ -59,7 +63,7 @@
         `https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js`,
         `https://cdn.bootcss.com/zepto/1.0rc1/zepto.min.js`,
       ], () => {
-        $script(`${this.editorPath}js/editormd.min.js`, () => {
+        $script(`/static/editor.md/editormd.js`, () => {
           this.initEditor();
         });
       });
@@ -85,7 +89,7 @@
   .main-editor{
     width: 100%;
     height: 100%;
-    margin-top: 100px;
+    margin-top: 0px;
   }
     
 </style>

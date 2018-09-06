@@ -5,15 +5,15 @@
             <small>Public Files</small>
         </h1>
         <hr>
-        <div class="column">
-            <div v-for="item in fileList" class="card col-md-4">
+        <div class="row">
+            <div v-for="item in fileList"  class="card col-lg-3 mx-2 mb-3">
                 <div class="card-body">
                     <h5 class="card-title">{{item.name}}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">作者({{item.ownerId}})</h6>
-                    <p class="card-text">修改时间：{{item.date}}</p>
-                    <a v-on:click="viewFile(item.id)" class="card-link">查看
+                    <p class="card-text">版本号:{{item.version}}</p>
+                    <button  v-on:click="viewFile(item.id)" class="card-link btn btn-outline-primary">查看
                         <small>(view)</small>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>

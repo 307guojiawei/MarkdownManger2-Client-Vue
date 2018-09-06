@@ -2,7 +2,7 @@
     <div class="container">
         <h1>{{file.name}}</h1>
         <hr>
-        <div class="column">
+        <div class="row">
             <div id="doc-content" class="col-md-12">
             </div>
         </div>
@@ -61,7 +61,7 @@ export default {
 
         ],
         () => {
-          $script(`/static/editor.md/js/editormd.js`, () => {
+          $script(`/static/editor.md/editormd.js`, () => {
             editormd.markdownToHTML("doc-content", {
               //注意：这里是上面DIV的id
               markdown: this.file.content,

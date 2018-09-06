@@ -15,14 +15,14 @@
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="#">我的Markdown<small>(My md file)</small></router-link>
+              <router-link class="nav-link" to="/privateFileList">我的Markdown<small>(My md file)</small></router-link>
             </li>
             <li class="nav-item ">
               <router-link class="nav-link" to="#">我的账户<small>(My account)</small></router-link>
             </li>
           </ul>
 
-          <button v-if="!isLogin" class="btn btn-outline-success my-sm-2" data-toggle="modal" data-target="#loginModal" type="submit">登录<small>(login)</small></button>
+          <button id='btnToggleModal' v-if="!isLogin" class="btn btn-outline-success my-sm-2" data-toggle="modal" data-target="#loginModal" type="submit">登录<small>(login)</small></button>
           <button v-if="isLogin" v-on:click="logout" class="btn btn-outline-success my-sm-2" type="submit">登出<small>(logout)</small></button>
 
         </div>
@@ -80,7 +80,8 @@ export default {
       }
     };
   },
-  beforeCreate: function() {
+  created: function() {
+    
     if (
       sessionStorage.getItem("token") &&
       sessionStorage.getItem("token") != "None"
@@ -115,7 +116,7 @@ export default {
       this.$post("auth", content, false, payload => {
         sessionStorage.setItem("token", payload.token);
         this.isLogin = true;
-        $("#loginModal").modal("hide");
+        $("#btnToggleModal").click();
         this.$toast("登录成功(Login success)");
       });
     }
