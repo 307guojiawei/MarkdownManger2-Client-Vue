@@ -12,6 +12,7 @@ Vue.use(VueResource);
 Vue.use(Toast);
 Vue.use(Connector);
 
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

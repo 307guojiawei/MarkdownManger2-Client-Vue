@@ -16,7 +16,9 @@ export function mapUrl(inputUrl){
             ['deleteFile','/file/private/deleteFile'],
             ['uploadImg','/file/private/uploadImg'],
             ['auth','/auth'],
-            ['regist','/regist']
+            ['regist','/regist'],
+            ['getHistoryFile','/file/private/getHistoryFile'],
+            ['restoreFile','/file/private/restoreFile']
         ]);
         var  res = prefix+m.get(inputUrl)+suffix;
         return res;

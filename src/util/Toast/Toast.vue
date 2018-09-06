@@ -2,7 +2,7 @@
       <!-- 全局提示框 -->
         <div v-show="visible">
             <div class="alert alert-info alert-dismissible fade show" role="alert">
-                {{message}}
+                <div v-html="message" ></div>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

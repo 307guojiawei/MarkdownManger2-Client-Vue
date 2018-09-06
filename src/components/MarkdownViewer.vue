@@ -1,6 +1,18 @@
 <template>
     <div class="container">
-        <h1>{{file.name}}</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="javascript:history.go(-1)">
+                                <i class="fa fa-arrow-left" aria-hidden="true"></i>Back</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{file.name}}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
         <hr>
         <div class="row">
             <div id="doc-content" class="col-md-12">
@@ -51,14 +63,13 @@ export default {
         [
           `https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js`,
           `https://cdn.bootcss.com/zepto/1.0rc1/zepto.min.js`,
-          '/static/editor.md/lib/marked.min.js',
-          '/static/editor.md/lib/flowchart.min.js',
-          '/static/editor.md/lib/prettify.min.js',
-          '/static/editor.md/lib/raphael.min.js',
-          '/static/editor.md/lib/sequence-diagram.min.js',
-          '/static/editor.md/lib/underscore.min.js',
-          '/static/editor.md/lib/jquery.flowchart.min.js',
-
+          "/static/editor.md/lib/marked.min.js",
+          "/static/editor.md/lib/flowchart.min.js",
+          "/static/editor.md/lib/prettify.min.js",
+          "/static/editor.md/lib/raphael.min.js",
+          "/static/editor.md/lib/sequence-diagram.min.js",
+          "/static/editor.md/lib/underscore.min.js",
+          "/static/editor.md/lib/jquery.flowchart.min.js"
         ],
         () => {
           $script(`/static/editor.md/editormd.js`, () => {

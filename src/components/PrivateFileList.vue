@@ -11,26 +11,30 @@
                 <div class="card-body">
                     <h5 class="card-title">{{item.name}}</h5>
                     <hr>
-                    <ul>
-                        <!-- <li class="list-group-item">修改时间(Last modified): {{item.date}}</li> -->
-                        <li data-toggle="tooltip" data-placement="right" title="点击以改变权限(click to change permission)">权限(Permission):
-                            <span v-on:click="togglePermission(item.id,item.permission)" class="badge badge-secondary">{{item.permission}}</span>
-                        </li>
-                        <li>
-                            <a data-toggle="modal" v-bind:data-target="'#'+item.id+'Modal'" data-placement="right" title="点击以查看文件信息(click to check file info)">状态(Status):
-                                <span v-if="item.status=='OK' " class="badge badge-success">{{item.status}}</span>
-                                <span v-if="item.status!='OK' " class="badge badge-danger">{{item.status}}</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <br>
-                    <button v-on:click="viewFile(item.id)" class="card-link btn btn-outline-secondary">查看
-                        <small>(view)</small>
-                    </button>
-                    <button v-on:click="editFile(item.id)" class="card-link btn btn-outline-primary">编辑
-                        <small>(edit)</small>
-                    </button>
 
+                    <p data-toggle="tooltip" data-placement="right" title="点击以改变权限(click to change permission)">权限(Permission):
+                        <span v-on:click="togglePermission(item.id,item.permission)" class="badge badge-secondary">{{item.permission}}</span>
+                    </p>
+                    <p>
+                        <a data-toggle="modal" v-bind:data-target="'#'+item.id+'Modal'" data-placement="right" title="点击以查看文件信息(click to check file info)">状态(Status):
+                            <span v-if="item.status=='OK' " class="badge badge-success">{{item.status}}</span>
+                            <span v-if="item.status!='OK' " class="badge badge-danger">{{item.status}}</span>
+                        </a>
+                    </p>
+
+                    <br>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <button v-on:click="viewFile(item.id)" class="form-control card-link btn btn-outline-secondary">查看
+                                <small>(view)</small>
+                            </button>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <button v-on:click="editFile(item.id)" class="form-control card-link btn btn-outline-primary">编辑
+                                <small>(edit)</small>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal fade" v-bind:id="item.id+'Modal'" tabindex="-1" role="dialog" v-bind:aria-labelledby="item.id+'ModalLabel'" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -45,9 +49,9 @@
                                 <p>当前版本：{{item.version}}</p>
                                 <hr>
                                 <h3>变更历史</h3>
-                                sdf sdf sdf
+                                <button class="btn btn-outline-info" v-on:click="getFileHistory(item.id)" data-dismiss="modal">查看(Check)</button>
                                 <hr>
-                                <button type="button" v-on:click="deleteFile(item.id)" class="btn btn-outline-danger">删除
+                                <button type="button" v-on:click="deleteFile(item.id)" class="btn btn-outline-danger" data-dismiss="modal">删除
                                     <small>(Delete)</small>
                                 </button>
                             </div>
@@ -85,10 +89,12 @@
                                 <input type="text" v-model="addFile.name" class="form-control" id="InputFileName" placeholder="输入文件名">
                             </div>
                             <div class="form-group">
-                                <label for="permissionSelect">文件权限选择<small>(Permission)</small></label>
+                                <label for="permissionSelect">文件权限选择
+                                    <small>(Permission)</small>
+                                </label>
                                 <select class="form-control" v-model="addFile.permission" id="permissionSelect">
                                     <option>public</option>
-                                    <option>private</option>                                    
+                                    <option>private</option>
                                 </select>
                             </div>
 
@@ -107,6 +113,7 @@
 <script>
 export default {
   name: "PrivateFileList",
+
   data() {
     return {
       fileList: [
@@ -114,9 +121,9 @@ export default {
           id: ""
         }
       ],
-      addFile:{
-          name:"",
-          permission:""
+      addFile: {
+        name: "",
+        permission: "public"
       }
     };
   },
@@ -174,22 +181,27 @@ export default {
       };
       this.$post("deleteFile", option, true, payload => {
         this.$toast("删除文件成功");
-        $("#" + fid.toString() + "Modal").modal("toggle");
         this.getPrivateList();
       });
     },
-    createFile: function(){
-        let option={
-            name:this.addFile.name,
-            permission:this.addFile.permission,
-            content:"",
-            date:new Date().getTime()
-        };
-        this.$post('addFile',option,true,payload=>{
-            this.$toast("创建文件成功(Create file success)");
-            this.getPrivateList();
-            document.getElementById("toggleAddFileModalBtn").click();
-        });
+    createFile: function() {
+      let option = {
+        name: this.addFile.name,
+        permission: this.addFile.permission,
+        content: "",
+        date: new Date().getTime()
+      };
+      this.$post("addFile", option, true, payload => {
+        this.$toast("创建文件成功(Create file success)");
+        this.getPrivateList();
+        document.getElementById("toggleAddFileModalBtn").click();
+      });
+    },
+    getFileHistory: function(id) {      
+      this.$router.push({
+        name: "fileHistoryViewer",
+        query: { fid: id }
+      });
     }
   }
 };

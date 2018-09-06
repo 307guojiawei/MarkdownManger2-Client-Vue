@@ -5,6 +5,7 @@ import PublicFile from '@/components/PublicFile'
 import MarkdownViewer from '@/components/MarkdownViewer'
 import PrivateFileList from '@/components/PrivateFileList'
 import MarkdownEditor from '@/components/MarkdownEditor'
+import FileHistoryViewer from '@/components/FileHistoryViewer'
 
 Vue.use(Router)
 
@@ -45,6 +46,14 @@ export default new Router({
         requireAuth: true
       },
       component:MarkdownEditor
+    },
+    {
+      path:'/fileHistoryViewer',
+      name:'fileHistoryViewer',
+      meta:{
+        requireAuth: true
+      },
+      component: FileHistoryViewer
     }
   ]
 })

@@ -3,7 +3,7 @@ import "vue";
 
 const Connector = {};
 Connector.install = function (Vue){
-    Vue.prototype.$post = function(url,  object, requireAuth,callback){
+    Vue.prototype.$post = function(url,  object, requireAuth,callback,errHandler=null){
         if(requireAuth){
             object.token = sessionStorage.getItem('token');
         }
@@ -15,10 +15,14 @@ Connector.install = function (Vue){
             }else
             {
                 //全局错误处理策略
+                let time = 1500;
                 switch(response.data.code){
                     case 4002://用户未登录
-                        if(response.data.msg === "login first"){
+                        if(response.data.msg.indexOf("login first") != -1){
                             sessionStorage.removeItem('token');
+                            setTimeout(()=>{
+                                window.location.href="#/";
+                            },2000)
                         }
                         break;
                     case 4003://session变化
@@ -27,10 +31,16 @@ Connector.install = function (Vue){
                         }else{
                             sessionStorage.setItem("token",response.payload.token);
                         }                        
-                        callback(response);
+                        callback(response.data.payload);
+                        break;
+                    case 4500:                        
+                        time = 3000;
+                        if(errHandler){
+                            errHandler(4500);
+                        }
                         break;
                 }
-                this.$toast(response.data.msg);
+                this.$toast(response.data.msg,time);
             }
         },(response)=>{
             console.log("fail");
