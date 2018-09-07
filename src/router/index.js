@@ -6,6 +6,7 @@ import MarkdownViewer from '@/components/MarkdownViewer'
 import PrivateFileList from '@/components/PrivateFileList'
 import MarkdownEditor from '@/components/MarkdownEditor'
 import FileHistoryViewer from '@/components/FileHistoryViewer'
+import UserControl from '@/components/UserControl'
 
 Vue.use(Router)
 
@@ -54,6 +55,13 @@ export default new Router({
         requireAuth: true
       },
       component: FileHistoryViewer
+    },{
+      path:'/userControl',
+      name:"userControl",
+      meta:{
+        requireAuth:true
+      },
+      component:UserControl
     }
   ]
 })

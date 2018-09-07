@@ -151,6 +151,9 @@ export default {
       } else {
         file.permission = "public";
       }
+      let localFile = JSON.parse(localStorage.getItem(file.id.toString()));
+      localFile.permission = file.permission;
+      localStorage.setItem(file.id.toString(),JSON.stringify(localFile));
       let option = {
         id: file.id,
         permission: file.permission,

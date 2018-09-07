@@ -481,7 +481,9 @@
             {
                 this.loadQueues();
             }
-
+            document.getElementById('imgDialogBtn').addEventListener("click",()=>{
+                this.executePlugin("imageDialog", "image-dialog/image-dialog");
+            });
             return this;
         },
         

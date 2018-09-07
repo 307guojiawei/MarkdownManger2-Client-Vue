@@ -1,11 +1,17 @@
 <template>
-  <div id="editor-md" class="main-editor">
-    <textarea id='mdContent' v-model="content"></textarea>
-  </div>
+    <div style="width:100%">
+        <div id="editor-md" class="main-editor">
+            <textarea id='mdContent' v-model="content"></textarea>
+        </div>
+        <div id="uploadImgBox" style="display:hidden" v-on:click="uploadImgHandler"></div>
+        <div id="resultMsgBox" style="display:hidden"></div>
+        <div id="imgDialogBtn"></div>
+    </div>
 </template>
 
 <script>
 import $script from "scriptjs";
+import * as UrlMapper from "@/util/UrlMapper";
 
 export default {
     name: "EditDocMainEditor",
@@ -38,7 +44,7 @@ export default {
                     sequenceDiagram: true, // 开启时序/序列图支持，默认关闭,
                     imageUpload: true,
                     imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                    imageUploadURL: "examples/php/upload.php",
+                    imageUploadURL: UrlMapper.mapUrl("uploadImg"),
                     onload: () => {
                         console.log("onload", this);
                     }
@@ -64,6 +70,17 @@ export default {
             editor.onkeypress = this.contentChangeHanler;
             editor.onkeydown = this.contentChangeHanler;
             editor.onmousedown = this.contentChangeHanler;
+            editor.ondrop = this.dropImageHandler;
+            document.ondragover = function(e) {
+                //console.log("drag over");
+                e.stopPropagation();
+                e.preventDefault();
+            };
+            editor.ondragover = function(e) {
+                //console.log("editor drag over");
+                e.stopPropagation();
+                e.preventDefault();
+            };
         }, 1000);
     },
     mounted() {
@@ -94,7 +111,76 @@ export default {
             });
         },
         contentChangeHanler: function(e) {
-            this.$emit("contentChange",this.dataTarget.innerHTML);
+            this.$emit("contentChange", this.dataTarget.innerHTML);
+        },
+        uploadImgHandler: function() {
+            let inputFileBox = document.getElementById("imgUploadFileInput");
+            let file = inputFileBox.files[0];
+
+            var formData = new FormData();
+            this.imageUploader(file, url => {
+                let returnMsg = document.getElementById("resultMsgBox");
+                returnMsg.innerHTML = UrlMapper.mapUrl("getRoot") + url;
+                returnMsg.click();
+            });
+            /*
+            formData.append("token", sessionStorage.getItem("token"));
+            formData.append("data", file);
+            // specify Content-Type, with formData as well
+            this.$http
+                .post(UrlMapper.mapUrl("uploadImg"), formData, {
+                    headers: { "Content-Type": "multipart/form-data" }
+                })
+                .then(
+                    function(res) {
+                        res.json().then(function(result) {
+                            let url = result.payload.url;
+                            let returnMsg = document.getElementById(
+                                "resultMsgBox"
+                            );
+                            returnMsg.innerHTML =
+                                UrlMapper.mapUrl("getRoot") + url;
+                            returnMsg.click();
+                            console.log(result);
+                        });
+                    },
+                    function(res) {
+                        console.log(res.body);
+                    }
+                );*/
+        },
+        imageUploader: function(file, callback) {
+            var formData = new FormData();
+            formData.append("token", sessionStorage.getItem("token"));
+            formData.append("data", file);
+            // specify Content-Type, with formData as well
+            this.$http
+                .post(UrlMapper.mapUrl("uploadImg"), formData, {
+                    headers: { "Content-Type": "multipart/form-data" }
+                })
+                .then(
+                    function(res) {
+                        res.json().then(function(result) {
+                            let url = result.payload.url;
+                            callback(url);
+                        });
+                    },
+                    function(res) {
+                        console.log(res.body);
+                    }
+                );
+        },
+        dropImageHandler: function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            let file = e.dataTransfer.files[0];
+            document.getElementById("imgDialogBtn").click();
+            this.imageUploader(file,(url)=>{
+                let returnMsg = document.getElementById("resultMsgBox");
+                returnMsg.innerHTML = UrlMapper.mapUrl("getRoot") + url;
+                returnMsg.click();
+            });
+            
         }
     }
 };

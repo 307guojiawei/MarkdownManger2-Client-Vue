@@ -15,12 +15,18 @@
         </div>
         <hr>
         <div class="row">
+            <div class="col-md-3">
+                <button class="btn btn-sm btn-outline-primary" v-on:click="checkHistoryVersion">
+                    <i class="fa fa-history" aria-hidden="true"></i>查看历史版本
+                    <small>check history version</small>
+                </button>
+            </div>
             <div class="col-md-2 ml-auto">
-                <button class="btn btn-outline-primary" v-if="!autoSync" v-on:click="sync">同步Sync</button>
+                <button class="btn btn-sm btn-outline-primary" v-if="!autoSync" v-on:click="sync">同步Sync</button>
             </div>
             <div class="col-md-3 ">
-                <button class="btn btn-outline-danger" v-if="!autoSync" v-on:click="toggleAutoSync">自动同步AutoSync:关闭</button>
-                <button class="btn btn-outline-success" v-if="autoSync" v-on:click="toggleAutoSync">自动同步AutoSync:开启</button>
+                <button class="btn btn-sm btn-outline-danger" v-if="!autoSync" v-on:click="toggleAutoSync">自动同步AutoSync:关闭</button>
+                <button class="btn btn-sm btn-outline-success" v-if="autoSync" v-on:click="toggleAutoSync">自动同步AutoSync:开启</button>
             </div>
 
         </div>
@@ -67,6 +73,12 @@ export default {
         setInterval(this.autoSyncHandler, 100);
     },
     methods: {
+        checkHistoryVersion: function() {
+            this.$router.push({
+                name: "fileHistoryViewer",
+                query: { fid: this.$route.query.fid }
+            });
+        },
         contentChangeHandler: function(content) {
             let handle = () => {
                 this.content = content;
@@ -119,6 +131,10 @@ export default {
                     this.hasNew = false;
                     this.file.version++;
                     this.file.content = this.content;
+                    localStorage.setItem(
+                        this.$route.query.fid.toString(),
+                        JSON.stringify(this.file)
+                    );
                     this.lock = false;
                 },
                 err => {

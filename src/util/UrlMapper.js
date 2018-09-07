@@ -7,6 +7,7 @@ export function mapUrl(inputUrl){
         var m = new Map([
             //模板：
             //['',''],
+            ['getRoot',''],
             ['getPublicList','/file/public/list'],
             ['getPublicFile','/file/public/getFile'],
             ['getPrivateList','/file/private/list'],
@@ -18,7 +19,8 @@ export function mapUrl(inputUrl){
             ['auth','/auth'],
             ['regist','/regist'],
             ['getHistoryFile','/file/private/getHistoryFile'],
-            ['restoreFile','/file/private/restoreFile']
+            ['restoreFile','/file/private/restoreFile'],
+            ['changePassword','/changePassword']
         ]);
         var  res = prefix+m.get(inputUrl)+suffix;
         return res;
