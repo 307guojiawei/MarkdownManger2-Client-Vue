@@ -43,7 +43,7 @@
 </template>
 <script>
 import EditDocMainEditor from "@/components/Editormd";
-
+import { Base64 } from 'js-base64';
 export default {
     name: "MarkdownEditor",
     components: { EditDocMainEditor },
@@ -114,6 +114,7 @@ export default {
         },
         sync: function() {
             if (!this.hasNew) return;
+            console.log(this.content);
             let option = {
                 id: this.$route.query.fid,
                 permission: this.file.permission,

@@ -111,7 +111,7 @@ export default {
             });
         },
         contentChangeHanler: function(e) {
-            this.$emit("contentChange", this.dataTarget.innerHTML);
+            this.$emit("contentChange", this.dataTarget.value);
         },
         uploadImgHandler: function() {
             let inputFileBox = document.getElementById("imgUploadFileInput");

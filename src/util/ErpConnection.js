@@ -7,7 +7,13 @@ Connector.install = function (Vue){
         if(requireAuth){
             object.token = sessionStorage.getItem('token');
         }
-        this.$http.post(UrlMapper.mapUrl(url), object,{"emulateJSON":true}).then((response)=>{
+        this.$http.post(UrlMapper.mapUrl(url), object,{
+            "emulateJSON":true,
+            "headers":{
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                
+            }
+        }).then((response)=>{
 
             if(response.data.code == 4001)
             {
