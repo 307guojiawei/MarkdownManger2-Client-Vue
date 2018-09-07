@@ -1,6 +1,8 @@
 export function mapUrl(inputUrl){
         
-        var prefix = "http://localhost:5000";        
+        // var prefix = "http://localhost:5000";   //调试
+        
+        var prefix = "http://"+window.location.host;    //部署
 
         var suffix = "";
 
